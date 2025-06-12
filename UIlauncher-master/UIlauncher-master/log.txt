@@ -1,0 +1,22 @@
+2025-06-04 15:55:21.015648 - User 'admin' logged in.
+2025-06-04 15:55:33.787457 - Failed login attempt #1 for user 'admin'.
+2025-06-04 15:55:37.417084 - Failed login attempt #2 for user 'admin'.
+2025-06-04 15:55:39.419739 - Failed login attempt #3 for user 'admin'.
+2025-06-04 15:55:51.787703 - Failed login attempt #1 for user 'admin'.
+2025-06-04 15:55:54.259867 - Failed login attempt #2 for user 'admin'.
+2025-06-04 15:55:56.198065 - Failed login attempt #3 for user 'admin'.
+2025-06-04 15:58:22.200377 - User 'admin' logged in.
+2025-06-04 15:58:37.483344 - Failed login attempt #1 for user 'admin'.
+2025-06-04 15:58:43.487397 - Failed login attempt #2 for user 'admin'.
+2025-06-04 15:58:45.861040 - Failed login attempt #3 for user 'admin'.
+2025-06-13 00:42:22.438411 - User 'admin' logged in.
+2025-06-13 01:44:42.528658 - User 'admin' logged in via API.
+2025-06-13 01:48:40.981977 - User 'admin1' logged in via API.
+2025-06-13 01:49:00.891571 - User 'admin1' logged in via API.
+2025-06-13 01:49:29.637828 - User 'ad' logged in via API.
+2025-06-13 01:57:14.655385 - User 'admin' logged in via API.
+2025-06-13 02:01:46.124553 - User 'admin' logged in via API.
+2025-06-13 02:06:33.716879 - User 'admin' logged in via API.
+2025-06-13 02:10:22.576131 - User 'admin' logged in via API.
+2025-06-13 02:15:34.759421 - User 'admin' logged in via API.
+2025-06-13 02:16:47.006036 - User 'admin' logged in via API.
