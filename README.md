@@ -1,4 +1,10 @@
 # ProjectInfoAssurance
+for Designing UI, Use any or use QT designer.exe
+for editing the database, use DB Browser for SQLite v3.13.1
+
+
+Only Development serve not yet online,
+but there is
 
 
 🔐 ✅ Secure App Development Roadmap (Revised)
