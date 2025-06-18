@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import DB_PATH
-import jwt
+from jwt import encode
 import datetime
 from config import JWT_SECRET, JWT_ALGORITHM, JWT_EXP_DELTA_SECONDS
 
@@ -57,12 +57,11 @@ def login():
         print(f'{request.remote_addr} - POST /login ❌ RESULT: Incorrect password.')
         return jsonify({'status': 'fail', 'message': 'Incorrect password.'}), 401
 
-    # ✅ JWT Token creation
     payload = {
         'username': username,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=JWT_EXP_DELTA_SECONDS)
     }
-    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+    token = encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
     print(f'{request.remote_addr} - POST /login ✅ RESULT: Login successful for "{username}"')
     print(f'🔐 JWT Token issued: {token}')
