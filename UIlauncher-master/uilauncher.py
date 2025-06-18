@@ -8,6 +8,8 @@ from PyQt5.QtCore import Qt
 import random
 import re
 import requests
+from jwt import decode
+from datetime import datetime
 
 def log_event(event):
     with open("log.txt", "a") as f:
@@ -41,29 +43,42 @@ class LoginWindow(QtWidgets.QWidget):
                 "http://127.0.0.1:5000/login",
                 json={"username": user, "password": pwd}
             )
-            data = response.json()
 
-            if data['status'] == 'success':
-                log_event(f"User '{user}' logged in via API.")
+            #log raw response for debugging
+            print(f"Status Code: {response.status_code}")
+            print(f"Response Text: {response.text}")
 
-                # 🔐 Save JWT token
-                self.token = data['token']
+            #raise exception for 4xx/5xx status codes
+            response.raise_for_status()
 
-                # ⏰ Decode JWT (no verification, just to read expiry)
-                import jwt
-                from datetime import datetime
-                decoded = jwt.decode(self.token, options={"verify_signature": False})
-                self.expiry = datetime.fromtimestamp(decoded['exp'])
+            try:
+                data = response.json()
+                if data['status'] == 'success':
+                    log_event(f"User '{user}' logged in via API.")
+                    self.token = data['token']
+                    decoded = decode(self.token, options={"verify_signature": False})
+                    self.expiry = datetime.fromtimestamp(decoded['exp'])
+                    self.start_session_timer()
+                    self.accept_login()
+                else:
+                    QtWidgets.QMessageBox.warning(
+                        self,
+                        "Login Failed",
+                        data.get('message', 'Login failed.')
+                    )
+            except requests.exceptions.JSONDecodeError:
+                QtWidgets.QMessageBox.critical(
+                    self,
+                    "Parse Error",
+                    "Server returned invalid JSON."
+                )
 
-                # ⏱️ Start session timer
-                self.start_session_timer()
-
-                # Open main app window
-                self.accept_login()
-            else:
-                QtWidgets.QMessageBox.warning(self, "Login Failed", data.get('message', 'Login failed.'))
-        except Exception as e:
-            QtWidgets.QMessageBox.critical(self, "Network Error", str(e))
+        except requests.exceptions.RequestException as e:
+            QtWidgets.QMessageBox.critical(
+                self,
+                "Network Error",
+                f"Request failed: {str(e)}"
+            )
 
     def start_session_timer(self):
         from PyQt5.QtCore import QTimer
@@ -611,3 +626,4 @@ ui_file = "LaunQueue.ui"
 # Launch the UI
 if __name__ == "__main__":
     load_ui(ui_file)
+
