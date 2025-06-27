@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundry Management Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem 1rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: rgba(248, 249, 250, 0.8);
+            border-bottom: 1px solid rgba(222, 226, 230, 0.5);
+            padding: 1.5rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #34495e;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Custom Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid rgba(222, 226, 230, 0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #7f8c8d;
+            font-weight: 600;
+            padding: 0.875rem 1.5rem;
+            transition: all 0.3s ease;
+            border-radius: 12px 12px 0 0;
+            background: transparent;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #667eea;
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(222, 226, 230, 0.5) rgba(222, 226, 230, 0.5) transparent;
+            border-width: 2px 2px 2px 2px;
+        }
+
+        /* Table Styling */
+        .table {
+            margin-bottom: 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: rgba(248, 249, 250, 0.8);
+            border-top: none;
+            border-bottom: 2px solid rgba(222, 226, 230, 0.5);
+            font-weight: 600;
+            color: #34495e;
+            padding: 1rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .table tbody td {
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+            border-top: 1px solid rgba(233, 236, 239, 0.5);
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .table-hover tbody tr:hover {
+            background: rgba(248, 249, 250, 0.9);
+        }
+
+        /* Form Styling */
+        .form-label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid rgba(225, 232, 237, 0.8);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: rgba(248, 249, 250, 0.8);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        /* Button Styling */
+        .btn {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #229954 0%, #28a745 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #68408a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #d68910 0%, #d35400 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(243, 156, 18, 0.3);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #cb4335 0%, #a93226 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #2e86c1 0%, #2471a3 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #85929e 0%, #6c7b7d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(149, 165, 166, 0.3);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.375rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-progress {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        }
+
+        .status-pickup {
+            background: rgba(243, 156, 18, 0.2);
+            color: #d68910;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .status-completed {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        /* Section Spacing */
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(222, 226, 230, 0.5);
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(222, 226, 230, 0.5);
+            padding: 1.5rem 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 0.75rem 1.5rem 0.75rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .card-header {
+                padding: 1.25rem 1.5rem;
+            }
+
+            .table-responsive {
+                font-size: 0.8rem;
+            }
+
+            .btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Loading States */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Form Row Spacing */
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Alert Styling */
+        .alert {
+            border-radius: 12px;
+            border: 1px solid transparent;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .alert-success {
+            background: rgba(212, 237, 218, 0.9);
+            color: #155724;
+            border-color: rgba(195, 230, 203, 0.5);
+        }
+
+        .alert-danger {
+            background: rgba(248, 215, 218, 0.9);
+            color: #721c24;
+            border-color: rgba(245, 198, 203, 0.5);
+        }
+
+        /* Empty state styling */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1>Laundry Management Dashboard</h1>
+            <div class="d-flex">
+                <span class="me-3 text-light">Welcome, <span id="username">User</span></span>
+             <button id="logoutBtn" class="btn btn-outline-light">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Status Overview Cards -->
+        <div class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Laundry Status Overview</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Status Tabs -->
+                    <ul class="nav nav-tabs" id="statusTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="inprogress-tab" data-bs-toggle="tab" data-bs-target="#inprogress" type="button" role="tab">
+                                In Progress
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pickup-tab" data-bs-toggle="tab" data-bs-target="#pickup" type="button" role="tab">
+                                Awaiting Pick-Up
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="statusTabsContent">
+                        <!-- In Progress Tab -->
+                        <div class="tab-pane fade show active" id="inprogress" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th>Type</th>
+                                            <th>Kilos</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inprogress-table-body">
+                                        <!-- Data will be populated via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Awaiting Pick-Up Tab -->
+                        <div class="tab-pane fade" id="pickup" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th>Type</th>
+                                            <th>Kilos</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Remarks</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pickup-table-body">
+                                        <!-- Data will be populated via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add New Laundry Section -->
+        <div class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Add New Laundry Item</h5>
+                </div>
+                <div class="card-body">
+                    <form id="addForm">
+                        <div class="row form-row">
+                            <div class="col-md-4">
+                                <label for="nameinfo" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="nameinfo" required pattern="[A-Za-z]+" placeholder="Enter customer name">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contactinfo" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="contactinfo" placeholder="123-456-7890" required pattern="\d{3}-\d{3}-\d{4}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="transactinfo" class="form-label">Service Type</label>
+                                <select class="form-select" id="transactinfo" required>
+                                    <option value="">Select service type</option>
+                                    <option value="Rush">Rush (₱50/kg)</option>
+                                    <option value="Normal">Normal (₱40/kg)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-4">
+                                <label for="kiloinfo" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="kiloinfo" min="0.1" step="0.1" required placeholder="0.0">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="remarksinfo" class="form-label">Remarks</label>
+                                <input type="text" class="form-control" id="remarksinfo" required placeholder="Additional notes">
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-success w-100">Add Laundry Item</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update/Manage Section -->
+        <div class="section">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Manage Laundry Items</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="laundrycombo" class="form-label">Select Laundry ID</label>
+                            <select class="form-select" id="laundrycombo">
+                                <option value="">Choose an ID to manage</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end gap-2">
+                            <button class="btn btn-primary" id="selectbutton">Load Details</button>
+                            <button class="btn btn-danger" id="deletebutton">Delete Item</button>
+                        </div>
+                    </div>
+
+                    <!-- Update Form -->
+                    <form id="updateForm">
+                        <div class="row form-row">
+                            <div class="col-md-4">
+                                <label for="nameupdate" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="nameupdate" required pattern="[A-Za-z]+">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contactupdate" class="form-label">Contact Number</label>
+                                <input type="text" class="form-control" id="contactupdate" placeholder="123-456-7890" required pattern="\d{3}-\d{3}-\d{4}">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="transactupdate" class="form-label">Service Type</label>
+                                <select class="form-select" id="transactupdate">
+                                    <option value="Rush">Rush (₱50/kg)</option>
+                                    <option value="Normal">Normal (₱40/kg)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-row">
+                            <div class="col-md-3">
+                                <label for="statusupdate" class="form-label">Status</label>
+                                <select class="form-select" id="statusupdate">
+                                    <option value="In progress">In Progress</option>
+                                    <option value="awaiting pick-up">Awaiting Pick-Up</option>
+                                    <option value="Picked-up">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="kiloupdate" class="form-label">Weight (kg)</label>
+                                <input type="number" class="form-control" id="kiloupdate" min="0.1" step="0.1" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="remarksupdate" class="form-label">Remarks</label>
+                                <input type="text" class="form-control" id="remarksupdate" required>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-warning w-100">Update Item</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this laundry item? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const API_URL = "/api/laundry";
+        const TOKEN = sessionStorage.getItem("token");
+
+        if (!TOKEN) {
+            window.location.href = "/";
+            return;
+        }
+
+        const links = document.querySelectorAll('a[href="/"]');
+        links.forEach(link => {
+            link.href = "/dashboard";
+        })
+
+        const username = "{{username}}";
+        if (username && username !== "User") {
+            document.getElementById('username').textContent = username;
+        }
+
+        function setButtonLoading(button, isLoading, originalText = null) {
+            if (isLoading) {
+                button.disabled = true;
+                button.dataset.originalText = button.textContent;
+                button.textContent = 'Loading...';
+            } else {
+                button.disabled = false;
+                button.textContent = originalText || button.dataset.originalText;
+            }
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            document.querySelector('.main-container').insertBefore(alertDiv, document.querySelector('.section'));
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        async function fetchLaundryData(tab = "0") {
+            try {
+                const response = await fetch(`${API_URL}?tab=${tab}`, {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+            
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+            
+                return await response.json();
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                showAlert(`Error loading data: ${error.message}`, 'danger');
+                return [];
+            }
+        }
+
+        async function populateLaundryIDs() {
+            try {
+                const response = await fetch("/api/laundry/combo", {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+            
+                if (!response.ok) {
+                    throw new Error('Failed to fetch laundry IDs');
+                }
+            
+                const ids = await response.json();
+                const combo = document.getElementById('laundrycombo');
+                combo.innerHTML = '<option value="">Choose an ID to manage</option>';
+
+                ids.forEach(id => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = `ID: ${id}`;
+                    combo.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching laundry IDs:", error);
+                showAlert(`Error loading laundry IDs: ${error.message}`, 'danger');
+            }
+        }
+
+        async function updateTable(tabId, status) {
+            const tableBody = document.getElementById(`${tabId}-table-body`);
+            tableBody.innerHTML = '<tr><td colspan="9" class="text-center">Loading...</td></tr>';
+        
+            const tabNumber = tabId === 'inprogress' ? "0" : "1";
+            const data = await fetchLaundryData(tabNumber);
+        
+            tableBody.innerHTML = '';
+        
+            if (data.length === 0 || !Array.isArray(data)) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="empty-state">
+                            No items found for this status
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                const rowData = [
+                    item.LaundryID,
+                    item.Date,
+                    item.Name,
+                    item.CellNum,
+                    item.TransactionType,
+                    item.Kilos,
+                    `₱${parseFloat(item.Total).toFixed(2)}`,
+                    item.Status,
+                    item.Remarks || ''
+                ];
+
+                rowData.forEach((cell, index) => {
+                    const td = document.createElement('td');
+                    if (index === 7) { // Status column
+                        let statusClass = 'status-progress';
+                        if (cell === 'awaiting pick-up') statusClass = 'status-pickup';
+                        if (cell === 'Picked-up') statusClass = 'status-completed';
+                        td.innerHTML = `<span class="status-badge ${statusClass}">${cell}</span>`;
+                    } else {
+                        td.textContent = cell;
+                    }
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        async function initializeDashboard() {
+            await populateLaundryIDs();
+            await updateTable('inprogress', 'In progress');
+        }
+
+        document.getElementById('inprogress-tab').addEventListener('click', () => {
+            updateTable('inprogress', 'In progress');
+        });
+
+        document.getElementById('pickup-tab').addEventListener('click', () => {
+            updateTable('pickup', 'awaiting pick-up');
+        });
+
+        document.getElementById('addForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            setButtonLoading(submitBtn, true);
+
+            // Get form data
+            const name = document.getElementById('nameinfo').value.trim();
+            const contactnum = document.getElementById('contactinfo').value.trim();
+            const transaction_type = document.getElementById('transactinfo').value;
+            const kilos = parseFloat(document.getElementById('kiloinfo').value);
+            const remarks = document.getElementById('remarksinfo').value.trim();
+
+            // Validate form data
+            if (!name || !contactnum || !transaction_type || !kilos || !remarks) {
+                showAlert('Please fill in all required fields', 'danger');
+                setButtonLoading(submitBtn, false);
+                return;
+            }
+
+            // Validate contact format
+            const contactPattern = /^\d{3}-\d{3}-\d{4}$/;
+            if (!contactPattern.test(contactnum)) {
+                showAlert('Contact number must be in format: 123-456-7890', 'danger');
+                setButtonLoading(submitBtn, false);
+                return;
+            }
+
+            const namePattern = /^[a-zA-Z\s]+$/;
+            if (!namePattern.test(name)) {
+                showAlert('Name must contain only letters and spaces', 'danger');
+                setButtonLoading(submitBtn, false);
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        name,
+                        contactnum,
+                        transaction_type,
+                        kilos,
+                        remarks
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to add laundry item');
+                }
+
+                showAlert('Laundry item added successfully!');
+
+                this.reset();
+
+                await initializeDashboard();
+                await updateTable('inprogress', 'In progress');
+            } catch (error) {
+                showAlert(error.message, 'danger')
+            } finally {
+                setButtonLoading(submitBtn, false);
+            }
+        });
+
+        
+
+        document.getElementById('selectbutton').addEventListener('click', async function() {
+            const laundryId = document.getElementById('laundrycombo').value;
+            if (!laundryId){
+                showAlert('Please select a laundry item', 'danger');
+                return;
+            }
+
+            setButtonLoading(this, true);
+
+            try{
+                const response = await fetch(`/api/laundry/laundry/${laundryId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }   
+                });
+
+                if(!response.ok){
+                    throw new Error('Failed to fetch laundry item');
+                }
+
+                const data = await response.json();
+
+                if(data && data.laundry > 0){
+                    const item = data[0];
+
+                    document.getElementById('nameupdate').value = item.Name;
+                    document.getElementById('contactupdate').value = item.CellNum;
+                    document.getElementById('transactupdate').value = item.TransactionType;
+                    document.getElementById('statusupdate').value = item.Status;
+                    document.getElementById('kiloupdate').value = item.Kilos;
+                    document.getElementById('remarksupdate').value = item.Remarks || '';
+                    showAlert('Details loaded successfully!');
+                } else {
+                    showAlert('No data found for the selected laundry item', 'danger');
+                }
+            } catch(error){
+                showAlert(`Error loading details: ${error.message}`, 'danger');
+            } finally {
+                setButtonLoading(this, false);
+            }
+        });
+
+        document.getElementById('updateForm').addEventListener('submit', async function(event){
+            event.preventDefault();
+
+            const laundryId = document.getElementById('laundrycombo').value;
+            if(!laundryId){
+                showAlert('Please select a laundry ID first', 'danger');
+                return;
+            }
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            setButtonLoading(submitBtn, true);
+
+            const name = document.getElementById('nameupdate').value.trim();
+            const contactnum = document.getElementById('contactupdate').value.trim();
+            const transaction_type = document.getElementById('transactupdate').value;
+            const status = document.getElementById('statusupdate').value;
+            const kilos = parseFloat(document.getElementById('kiloupdate').value);
+            const remarks = document.getElementById('remarksupdate').value.trim();
+
+            if (!name || !contactnum || !transaction_type || !status || !kilos || !remarks) {
+                showAlert('Please fill in all required fields', 'danger');
+                setButtonLoading(submitBtn, false);
+                return;
+            }
+
+            try{
+                const response = await fetch(`${API_URL}/${laundryId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        name,
+                        contactnum,
+                        transaction_type,
+                        status,
+                        kilos,
+                        remarks
+                    })
+                });
+
+                if(!response.ok){
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to update laundry item');
+                }
+
+                showAlert('Laundry item updated successfully');
+
+                await initializeDashboard();
+
+                const activeTab = document.querySelector('.nav-link.active');
+                if(activeTab.id === 'inprogress-tab'){
+                    await updateTable('inprogress', 'In progress');
+                }else{
+                    await updateTable('pickup', 'awaiting pick-up');
+                }
+            } catch (error) {
+                showAlert(error.message, 'danger');
+            } finally {
+                setButtonLoading(submitBtn, false);
+            }
+        });
+
+        document.getElementById('deletebutton').addEventListener('click', function() {
+            const laundryId = document.getElementById('laundrycombo').value;
+            if (!laundryId) {
+                showAlert('Please select a laundry ID first', 'danger');
+                return;
+            }
+
+            // Show confirmation modal
+            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            modal.show();
+
+            // Store the ID for deletion
+            document.getElementById('confirmDeleteBtn').dataset.deleteId = laundryId;
+        });
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async function() {
+            const laundryId = this.dataset.deleteId;
+            
+            setButtonLoading(this, true);
+
+            try {
+                const response = await fetch(`${API_URL}/${laundryId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${TOKEN}`
+                    }
+                });
+
+                if(!response.ok){
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to delete laundry item');
+                }
+
+                showAlert('Laundry item deleted successfully!');
+
+                document.getElementById('updateForm').reset();
+                document.getElementById('laundrycombo').value = '';
+
+                await initializeDashboard();
+
+                const activeTab = document.querySelector('.nav-link.active');
+                if(activeTab.id === 'inprogress-tab') {
+                    await updateTable('inprogress', 'In progress');
+                } else {
+                    await updateTable('pickup', 'awaiting pick-up');
+                }
+            } catch (error){
+                showAlert(error.message, 'danger');
+            } finally{
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'));
+                modal.hide();
+            
+                setButtonLoading(this, false);
+            }
+        });
+
+        initializeDashboard();
+
+        let refreshTimer;
+
+        function setupRefreshTimer(){
+            if(refreshTimer){
+                clearInterval(refreshTimer);
+            }
+
+            refreshTimer = setInterval(async () => {
+                try{
+                    const activeTab = document.querySelector('.nav-link.active');
+                    if (activeTab.id === 'inprogress-tab') {
+                        await updateTable('inprogress', 'In progress');
+                    } else if (activeTab.id === 'pickup-tab'){
+                        await updateTable('pickup', 'awaiting pick-up');
+                    }
+                } catch (error){
+                    console.error("Refresh error:", error);
+                    clearInterval(refreshTimer);
+                }
+            }, 30000);
+        }
+
+        setupRefreshTimer();
+
+        document.getElementById('inprogress-tab').addEventListener('click', setupRefreshTimer);
+        document.getElementById('pickup-tab').addEventListener('click', setupRefreshTimer);
+
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            try{
+                await fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        username: document.getElementById('username').textContent
+                    })
+                });
+            } catch (error) {
+                console.error("Logout error:", error);
+            } finally {
+                sessionStorage.removeItem('token');
+                window.location.href = '/';
+            }
+        });
+    });
+
+    
+    </script>
+</body>
